@@ -1,0 +1,288 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="InstagramとThreadsで相談が来る発信をするための、投稿時間・文字数・構成・注意点と、その場で使える投稿チェッカー。">
+<meta property="og:type" content="article">
+<meta property="og:title" content="相談が来るSNS発信">
+<meta property="og:description" content="InstagramとThreadsで相談が来る発信をするための、投稿時間・文字数・構成・注意点と、その場で使える投稿チェッカー。">
+<meta name="twitter:card" content="summary">
+<title>相談が来るSNS発信</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Zen+Kaku+Gothic+New:wght@500;700;900&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap">
+<style>
+/* 縦1列の読み物＋最後に手を動かす道具。結論→根拠→道具→出典の順 */
+:root {
+  --bg: #f4f6f8;
+  --paper: #ffffff;
+  --ink: #17212b;
+  --sub: #566372;
+  --line: #d9dfe5;
+  --accent: #0b6e69;
+  --mark: #fbd900;
+  --warn: #b3261e;
+  --good: #1e7a46;
+  --display: "Zen Kaku Gothic New", "Hiragino Kaku Gothic ProN", "Yu Gothic", sans-serif;
+  --body: "Noto Sans JP", "Hiragino Kaku Gothic ProN", "Yu Gothic", "Meiryo", sans-serif;
+  --mono: "JetBrains Mono", ui-monospace, "Consolas", monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0f151b; --paper: #172029; --ink: #e6ebf0; --sub: #9aa8b6; --line: #2a3542;
+    --accent: #4fc2b9; --mark: #fbd900; --warn: #ff8a80; --good: #6fd39a; color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0f151b; --paper: #172029; --ink: #e6ebf0; --sub: #9aa8b6; --line: #2a3542;
+  --accent: #4fc2b9; --mark: #fbd900; --warn: #ff8a80; --good: #6fd39a; color-scheme: dark;
+}
+* { box-sizing: border-box; }
+body { background: var(--bg); color: var(--ink); font-family: var(--body); font-size: 15.5px; line-height: 1.8; }
+.wrap {
+  max-width: 760px; margin: 0 auto; padding-block: 36px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+  display: grid; gap: 28px;
+}
+h1, h2, h3 { font-family: var(--display); line-height: 1.4; margin: 0; text-wrap: balance; }
+h1 { font-size: clamp(1.6rem, 5vw, 2.2rem); font-weight: 900; }
+h2 { font-size: 1.25rem; font-weight: 700; display: flex; gap: 10px; align-items: baseline; }
+h2 .no { font-family: var(--mono); font-size: 0.85rem; color: var(--accent); }
+p { margin: 0; }
+.eyebrow { font-size: 0.78rem; letter-spacing: 0.12em; color: var(--accent); font-weight: 700; }
+.q { border-left: 3px solid var(--accent); padding: 4px 0 4px 14px; color: var(--sub); }
+.note { font-size: 0.85rem; color: var(--sub); }
+mark { background: linear-gradient(transparent 58%, color-mix(in srgb, var(--mark) 70%, transparent) 58%); color: inherit; padding: 0 1px; }
+
+.answers { display: grid; gap: 10px; }
+.ans { display: grid; grid-template-columns: 5.5em 1fr; gap: 14px; background: var(--paper); border: 1px solid var(--line); border-radius: 8px; padding: 14px 16px; }
+.ans b { font-family: var(--display); color: var(--accent); }
+
+section.block { display: grid; gap: 12px; }
+ul.points { margin: 0; padding-left: 1.2em; display: grid; gap: 6px; }
+.src { font-family: var(--mono); font-size: 0.72rem; color: var(--accent); vertical-align: super; text-decoration: none; }
+.judge { font-size: 0.75rem; border: 1px solid var(--sub); color: var(--sub); border-radius: 3px; padding: 0 4px; margin-right: 4px; white-space: nowrap; }
+
+.tablebox { overflow-x: auto; }
+table { border-collapse: collapse; width: 100%; min-width: 460px; background: var(--paper); font-size: 0.92rem; }
+th, td { border: 1px solid var(--line); padding: 8px 10px; text-align: left; vertical-align: top; }
+th { font-family: var(--display); background: color-mix(in srgb, var(--accent) 8%, var(--paper)); }
+tbody th { white-space: nowrap; }
+td.num { font-family: var(--mono); font-variant-numeric: tabular-nums; white-space: nowrap; }
+
+ol.flow { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; counter-reset: f; }
+ol.flow li { counter-increment: f; display: grid; grid-template-columns: 2em 1fr; gap: 8px; }
+ol.flow li::before { content: counter(f); font-family: var(--mono); color: var(--paper); background: var(--accent); border-radius: 50%; width: 1.7em; height: 1.7em; display: grid; place-items: center; font-size: 0.8rem; margin-top: 3px; }
+
+/* 道具 */
+.tool { background: var(--paper); border: 1px solid var(--line); border-radius: 10px; padding: 18px; display: grid; gap: 14px; }
+.seg { display: inline-flex; border: 1px solid var(--line); border-radius: 999px; padding: 3px; gap: 3px; width: fit-content; }
+.seg button { font: inherit; font-size: 0.9rem; border: 0; background: transparent; color: var(--sub); padding: 4px 14px; border-radius: 999px; cursor: pointer; }
+.seg button[aria-pressed="true"] { background: var(--accent); color: var(--paper); }
+.seg button:focus-visible, textarea:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+textarea { width: 100%; min-height: 270px; font: inherit; line-height: 1.7; color: var(--ink); background: var(--bg); border: 1px solid var(--line); border-radius: 8px; padding: 12px; resize: vertical; }
+.checks { list-style: none; margin: 0; padding: 0; display: grid; gap: 6px; }
+.checks li { display: grid; grid-template-columns: 3.2em 1fr; gap: 10px; align-items: start; font-size: 0.93rem; }
+.pill { font-size: 0.75rem; font-weight: 700; text-align: center; border-radius: 4px; padding: 1px 0; }
+.pill.ok { color: var(--good); border: 1px solid var(--good); }
+.pill.ng { color: var(--warn); border: 1px solid var(--warn); }
+.pill.info { color: var(--sub); border: 1px solid var(--sub); }
+
+ol.sources { margin: 0; padding-left: 1.6em; display: grid; gap: 4px; font-size: 0.82rem; color: var(--sub); }
+ol.sources a { color: var(--accent); word-break: break-all; }
+footer { font-size: 0.8rem; color: var(--sub); border-top: 1px solid var(--line); padding-top: 14px; }
+
+@media (max-width: 520px) {
+  .ans { grid-template-columns: 1fr; gap: 2px; }
+}
+@media (prefers-reduced-motion: reduce) { * { transition: none !important; } }
+</style>
+<style>body { margin: 0; } img { max-width: 100%; }</style>
+</head>
+<body>
+<div class="wrap">
+  <header style="display:grid; gap:12px">
+    <p class="eyebrow">いただいた質問</p>
+    <h1>相談が来るSNS発信</h1>
+    <p class="q">Threads・Instagramで知名度を上げて、相談や連絡が来るようにしたい。投稿時間・構成・文字数で気をつけることは？</p>
+    <p class="note">事業の中身が分からないので、どの業種にも当てはまる所だけ答えます。</p>
+  </header>
+
+  <div class="answers">
+    <div class="ans"><b>投稿時間</b><p>Instagramでは、誰にでも当てはまる正解の時刻はありません。<mark>自分のフォロワーがいる時間を確かめて、固定してください。</mark></p></div>
+    <div class="ans"><b>文字数</b><p>［判定］上限まで書く必要はなく、<mark>勝負は書き出しです。</mark></p></div>
+    <div class="ans"><b>構成</b><p>相談が来るかは、<mark>投稿の最後の一文とプロフィール</mark>で大きく変わると考えます。</p></div>
+  </div>
+
+  <section class="block">
+    <h2>投稿時間</h2>
+    <ul class="points">
+      <li>Instagramの責任者のAdam Mosseri氏は、投稿時間はあまり関係なく、フォロワーが一番動く少し前に出すと少し有利、と話しています。<a class="src" href="#s13">[13]</a> <span class="note">Shopifyの記事で確認。本人の投稿は未確認</span></li>
+      <li>インサイトの見方は公式ヘルプにあります。<a class="src" href="#s14">[14]</a> フォロワーが最もアクティブな時間帯は、公開アカウントでフォロワーが100名以上ならインサイトで確かめられます。<a class="src" href="#s19">[19]</a></li>
+      <li>［判定］試すなら、朝・昼・夕・夜の4つ。<mark>内容と曜日をそろえて時間だけ変え</mark>、反応が一番良い時間に固定します。</li>
+      <li>Sprout Socialの世界調査（Instagramを含む6つのSNSの約30.7万アカウント）では、Instagramは火・水曜が強く土日が弱い結果でした。<a class="src" href="#s15">[15]</a> 日本だけを対象にした信頼できる調査は未確認です。</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2>文字数</h2>
+    <div class="tablebox">
+      <table>
+        <thead><tr><th></th><th>Instagram</th><th>Threads</th></tr></thead>
+        <tbody>
+          <tr><th>本文</th><td><span class="num">2,200</span>字（開発者向け資料の値で、アプリでは未確認） <a class="src" href="#s8">[8]</a></td><td><span class="num">500</span>字 <a class="src" href="#s9">[9]</a><br><span class="note">長文は添付で10,000字まで</span></td></tr>
+          <tr><th>タグ</th><td><span class="num">5</span>個まで <a class="src" href="#s3">[3]</a></td><td>トピック<span class="num">1</span>つ <a class="src" href="#s10">[10]</a></td></tr>
+          <tr><th>画像・動画</th><td>1投稿<span class="num">20</span>点まで <a class="src" href="#s4">[4]</a><br><span class="note">3分を超えるリールは新しい人におすすめされない</span> <a class="src" href="#s5">[5]</a></td><td>―</td></tr>
+          <tr><th>プロフィール</th><td>投稿を<span class="num">3</span>件まで固定 <a class="src" href="#s6">[6]</a></td><td>―</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <ul class="points">
+      <li>［判定］<mark>書き出しで、誰の・どんな悩みか</mark>を書きます。</li>
+      <li>2〜3行ごとに改行。改行しないと読みづらくなります。</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2>相談が来る構成</h2>
+    <ol class="flow">
+      <li><p><b>プロフィール</b>：誰の・何を・どう変えるか。最後の行は次のステップへの誘導（連絡の方法・リンク）。プロアカウントなら電話・メール・道順のボタンを置けます（公式の本文は未確認）。<a class="src" href="#s7">[7]</a></p></li>
+      <li><p><b>投稿</b>：1枚目は題名、2枚目で相手の悩みを言葉にする。中身は1枚1メッセージ。</p></li>
+      <li><p><b>最後の一文</b>：<mark>何を送ればいいかまで書く。</mark>例「相談したい方はDMで『相談』と送ってください」</p></li>
+    </ol>
+    <ul class="points">
+      <li>まだ知らない人に届けるならリール。最後まで見られる・シェアされることが評価されます。<a class="src" href="#s1">[1]</a></li>
+      <li>［判定］<mark>誰かに送りたくなる内容か</mark>が大事。フォロワー以外への届き方では、人に送られる数（sends）がやや重く見られると報じられています。<a class="src" href="#s12">[12]</a> <span class="note">報道で確認。公式ページは未確認</span></li>
+      <li>［判定］本数より質で、続けられる本数のまま品質を落とさない方を選びます。</li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2>気をつけること</h2>
+    <ul class="points">
+      <li>依頼を受けて報酬をもらう投稿は、本文で「広告」「PR」などと分かるように。2023年10月から、広告と分からない広告は法律違反です。<a class="src" href="#s16">[16]</a> 返信欄に書くだけでは足りない場合が多いとされています。<a class="src" href="#s17">[17]</a></li>
+      <li>「No.1」などの表示には根拠が要ります。根拠の弱いNo.1表示は、国が実態を調べて注意を呼びかけています。<a class="src" href="#s18">[18]</a></li>
+      <li>他人の投稿の転載や、他アプリの透かし入り動画は、おすすめに出にくくなります。<a class="src" href="#s2">[2]</a></li>
+    </ul>
+  </section>
+
+  <section class="block">
+    <h2>投稿チェッカー</h2>
+    <p class="note">下に投稿文を貼ると、文字数・タグの数・1行目・連絡のしかた・根拠が要る言葉・1行の長さをその場で点検します。</p>
+    <div class="tool">
+      <div class="seg" role="group" aria-label="どのSNSか">
+        <button type="button" id="pf-ig" aria-pressed="true">Instagram</button>
+        <button type="button" id="pf-th" aria-pressed="false">Threads</button>
+      </div>
+      <textarea id="post" aria-label="投稿文">会社紹介の動画、作ったのに見られていない方へ。
+
+社長の想いより先に、
+お客さんの困りごとを映していますか？
+
+愛知で取材型の映像を作っています。
+相談したい方は、DMで「動画」と送ってください。
+
+#会社紹介動画 #愛知の映像制作</textarea>
+      <p class="note" style="margin-top:-6px">見本：池本の映像制作の投稿として書いた例です。</p>
+      <ul class="checks" id="checks" aria-live="polite"></ul>
+    </div>
+  </section>
+
+  <section class="block">
+    <h2><span class="no">出典</span>確認した資料</h2>
+    <ol class="sources">
+      <li id="s1"><a href="https://about.instagram.com/blog/announcements/instagram-ranking-explained">Instagram公式 ランキングの仕組み（2023/5/31）</a></li>
+      <li id="s2"><a href="https://creators.instagram.com/blog/recommendations-and-originality">Instagram公式 おすすめとオリジナル（2024/4/30）</a></li>
+      <li id="s3"><a href="https://www.facebook.com/help/instagram/351460621611097">Instagramヘルプ ハッシュタグ</a></li>
+      <li id="s4"><a href="https://www.facebook.com/help/instagram/269314186824048">Instagramヘルプ 複数の写真・動画の投稿</a></li>
+      <li id="s5"><a href="https://www.facebook.com/help/instagram/2720958398006062">Instagramヘルプ リール</a></li>
+      <li id="s6"><a href="https://www.facebook.com/help/instagram/318456537074409">Instagramヘルプ 投稿の固定</a></li>
+      <li id="s7"><a href="https://www.facebook.com/help/instagram/138925576505882">Instagramヘルプ 連絡先ボタン</a></li>
+      <li id="s8"><a href="https://developers.facebook.com/documentation/instagram-platform/instagram-graph-api/reference/ig-user/media">Meta 開発者向け資料（本文2,200字。アプリのヘルプでは未確認）</a></li>
+      <li id="s9"><a href="https://about.fb.com/news/2025/09/attach-text-threads-posts-share-longer-perspectives/">Meta公式 Threadsの長文添付（2025/9/4）</a></li>
+      <li id="s10"><a href="https://www.facebook.com/help/instagram/1356090605000312">Threadsヘルプ トピック</a></li>
+      <li id="s11"><a href="https://about.fb.com/news/2025/03/new-threads-features-more-personalized-experience-you-control/">Meta公式 Threadsの新機能</a></li>
+      <li id="s12"><a href="https://www.socialmediatoday.com/news/instagram-shares-algorithm-2025/738034/">Social Media Today 報道（2025/1/22）</a></li>
+      <li id="s13"><a href="https://www.shopify.com/ca/blog/time-post-instagram">Shopify 記事（2026/6/19更新）</a></li>
+      <li id="s14"><a href="https://www.facebook.com/help/instagram/1533933820244654">Instagramヘルプ インサイトを見る</a></li>
+      <li id="s15"><a href="https://sproutsocial.com/insights/best-times-to-post-on-instagram/">Sprout Social 調査（2026年3月更新）</a></li>
+      <li id="s16"><a href="https://www.caa.go.jp/policies/policy/representation/fair_labeling/stealth_marketing/">消費者庁 ステルスマーケティング規制</a></li>
+      <li id="s17"><a href="https://www.caa.go.jp/policies/policy/representation/fair_labeling/faq/stealth_marketing/">消費者庁 ステマ規制のQ&amp;A</a></li>
+      <li id="s18"><a href="https://www.caa.go.jp/notice/entry/039459/">消費者庁 No.1表示の実態調査（2024/9/26）</a></li>
+      <li id="s19"><a href="https://www.facebook.com/help/instagram/788388387972460">Instagramヘルプ インサイトについて</a></li>
+    </ol>
+  </section>
+
+  <footer>池本が学んできたSNS運用の知識を、各社の公式情報と照らし合わせて作りました。SNSの仕様は変わるので、使う前に公式でも確認してください。確認日：2026年11月1日（日曜日）</footer>
+</div>
+
+<script>
+(() => {
+  const LIMITS = {
+    ig: { chars: 2200, tags: 5, note: "。開発者向け資料の値で、アプリでは未確認" },
+    th: { chars: 500, tags: 1, note: "" },
+  };
+  let pf = "ig";
+  const ta = document.getElementById("post");
+  const out = document.getElementById("checks");
+  const btns = { ig: document.getElementById("pf-ig"), th: document.getElementById("pf-th") };
+
+  const contact = /(DM|ＤＭ|相談|問い合わせ|問合せ|お問合せ|予約|連絡|メッセージ)/;
+  const risky = /(No\.?1|NO\.?1|ナンバーワン|必ず|絶対|日本一|業界初|最安|100%|１００％|誰でも)/g;
+
+  function row(kind, label, text) {
+    const li = document.createElement("li");
+    const p = document.createElement("span");
+    p.className = "pill " + kind;
+    p.textContent = label;
+    const t = document.createElement("span");
+    t.textContent = text;
+    li.append(p, t);
+    return li;
+  }
+
+  function check() {
+    const s = ta.value;
+    const L = LIMITS[pf];
+    const chars = [...s].length;
+    const lines = s.split("\n");
+    const first = (lines.find(l => l.trim()) || "").trim();
+    const tags = s.match(/[#＃][^\s#＃]+/g) || [];
+    const hits = [...new Set(s.match(risky) || [])];
+    const longLine = lines.some(l => [...l].length > 60);
+    const rows = [];
+
+    rows.push(chars <= L.chars
+      ? row("ok", "OK", `文字数 ${chars}字（上限 ${L.chars.toLocaleString()}字${L.note}）`)
+      : row("ng", "超過", `文字数 ${chars}字。上限 ${L.chars.toLocaleString()}字を超えています${L.note}`));
+    rows.push(row("info", "確認", `1行目は ${[...first].length}字：「${first.slice(0, 40)}${[...first].length > 40 ? "…" : ""}」 誰の悩みか伝わりますか`));
+    rows.push(tags.length <= L.tags
+      ? row("ok", "OK", `タグ ${tags.length}個（上限 ${L.tags}個）`)
+      : row("ng", "超過", `タグ ${tags.length}個。上限 ${L.tags}個を超えています`));
+    rows.push(contact.test(s)
+      ? row("ok", "OK", "連絡のしかたが書いてあります")
+      : row("ng", "なし", "最後に、何を送れば相談できるかを書きましょう"));
+    rows.push(hits.length
+      ? row("ng", "注意", `根拠が要る言葉：${hits.join("・")}`)
+      : row("ok", "OK", "根拠が要る言葉は見当たりません"));
+    rows.push(longLine
+      ? row("ng", "注意", "長すぎる行があります。改行を入れましょう")
+      : row("ok", "OK", "長すぎる行はありません"));
+
+    out.replaceChildren(...rows);
+  }
+
+  function setPf(next) {
+    pf = next;
+    for (const k in btns) btns[k].setAttribute("aria-pressed", String(k === pf));
+    check();
+  }
+  btns.ig.addEventListener("click", () => setPf("ig"));
+  btns.th.addEventListener("click", () => setPf("th"));
+  ta.addEventListener("input", check);
+  check();
+})();
+</script>
+</body>
+</html>
